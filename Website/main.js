@@ -19,6 +19,22 @@ var canGhost = true;
 // Undo
 var verticesListGhost = [];
 var boundingBoxesGhost = [];
+var colorsArrayGhost = [];
+
+// Color
+var color = new Uint8Array(4);
+var colorsArray = [];
+var colorSelected = 0;
+var vertexColors = [
+    vec4( 0.0, 0.0, 0.0, 1.0 ),  // black
+    vec4( 1.0, 0.0, 0.0, 1.0 ),  // red
+    vec4( 1.0, 1.0, 0.0, 1.0 ),  // yellow
+    vec4( 0.0, 1.0, 0.0, 1.0 ),  // green
+    vec4( 0.0, 0.0, 1.0, 1.0 ),  // blue
+    vec4( 1.0, 0.0, 1.0, 1.0 ),  // magenta
+    vec4( 1.0, 1.0, 1.0, 1.0 ),  // white
+    vec4( 0.0, 1.0, 1.0, 1.0 ),  // cyan
+];
 
 window.onload = function main() {
 
@@ -96,6 +112,7 @@ function erase(){
                 var i = boundingBoxes.indexOf(e);
                 var temp = boundingBoxes.splice(i, 1);
                 temp = verticesList.splice(i, 1);
+                temp = colorsArray.splice(i, 1);
                 console.log("Deleting: ", verticesList[i])
                 console.log(verticesList)
             }
@@ -114,14 +131,27 @@ function addLines(){
         canGhost = true;
     }
 
-    var cleared = false;
+    // assigns currently selected color to line
+    assignLineColor();
 
+    var cleared = false;
+    var i = 0;
     verticesList.forEach(e => {
+        // Associate our color with our data
+        var cBuffer = gl.createBuffer();
+        gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
+        gl.bufferData( gl.ARRAY_BUFFER, flatten(colorsArray[i]), gl.STATIC_DRAW );
+        i++;
+
+        var vColor = gl.getAttribLocation( program, "vColor" );
+        gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
+        gl.enableVertexAttribArray( vColor );
+
         // Load the data into the GPU
         var bufferId = gl.createBuffer();
         gl.bindBuffer( gl.ARRAY_BUFFER, bufferId );
         gl.bufferData( gl.ARRAY_BUFFER, flatten(e), gl.STATIC_DRAW);
- 
+
         // Associate out shader variables with our data buffer
         var vPosition = gl.getAttribLocation( program, "vPosition" );
         gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
@@ -138,8 +168,9 @@ function addLines(){
 
 function undo(){
     if(!(verticesListGhost.length < 1)){
-        verticesList = verticesListGhost.pop()
-        boundingBoxes = boundingBoxesGhost.pop()
+        verticesList = verticesListGhost.pop();
+        boundingBoxes = boundingBoxesGhost.pop();
+        colorsArray = colorsArrayGhost.pop();
 
         console.log("Undo successfull")
     } else {
@@ -152,21 +183,29 @@ function undo(){
 function updateGhost(){
     verticesListGhost.push(verticesList);
     boundingBoxesGhost.push(boundingBoxes);
+    colorsArrayGhost.push(colorsArray);
     console.log("Updated ghost:");
-    console.log(verticesListGhost)
+    // console.log(verticesListGhost)
 }
 
 function clearCanvas(){
     verticesList = [];
     boundingBoxes = [];
+    colorsArray = [];
+    verticesListGhost = [];
+    boundingBoxesGhost = [];
+    colorsArrayGhost = [];
     render(true, 0);
 }
 
 function eraseToggle(){
+    var eraseButton = document.getElementById("erase");
     if(erasing){
         erasing = false;
+        eraseButton.classList.remove("show");
     } else {
         erasing = true;
+        eraseButton.classList.add("show");
     }
     console.log(erasing);
 }
@@ -178,4 +217,42 @@ function render(clear, points) {
     }
 
     gl.drawArrays( gl.LINES, 0, points.length);
+}
+
+function assignLineColor(){
+    colorsArray.push(vertexColors[colorSelected]);
+    console.log(vertexColors[colorSelected]);
+}
+
+function selectColor(x){
+    switch (x) {
+        case 1:
+            colorSelected = 1; //Red
+            console.log("Color is now RED")
+            break;
+        case 2:
+            colorSelected = 2; //Yellow
+            console.log("Color is now YELLOW")
+            break;
+        case 3:
+            colorSelected = 3; //Green
+            break;
+        case 4:
+            colorSelected = 4; //Blue
+            break;
+        case 5:
+            colorSelected = 5; //Magenta
+            break;
+        case 6:
+            colorSelected = 6; //White
+            break;
+        case 7:
+            colorSelected = 7; //Cyan
+            break;
+        default:
+            colorSelected = 0; //Black
+            console.log("Color is now BLACK")
+            break;
+    }
+    
 }

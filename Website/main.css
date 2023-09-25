@@ -12,3 +12,47 @@ header {
     display: flex;
     justify-content: left;
 }
+
+.show {
+    background-color: slategray;
+}
+
+.cb {
+    color: black;
+    background-color: black;
+}
+
+.cr {
+    color: red;
+    background-color: red;
+}
+
+.cy {
+    color: yellow;
+    background-color: yellow;
+}
+
+.cm {
+    color: magenta;
+    background-color: magenta;
+}
+
+.cc {
+    color: cyan;
+    background-color: cyan;
+}
+
+.cu {
+    color: blue;
+    background-color: blue;
+}
+
+.cg {
+    color: green;
+    background-color: green;
+}
+
+.cw {
+    color: white;
+    background-color: white;
+}
