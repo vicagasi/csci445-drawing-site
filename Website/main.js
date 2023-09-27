@@ -181,9 +181,9 @@ function undo(){
 }
 
 function updateGhost(){
-    verticesListGhost.push(verticesList);
-    boundingBoxesGhost.push(boundingBoxes);
-    colorsArrayGhost.push(colorsArray);
+    //verticesListGhost.push(verticesList);
+    //boundingBoxesGhost.push(boundingBoxes);
+    //colorsArrayGhost.push(colorsArray);
     console.log("Updated ghost:");
     // console.log(verticesListGhost)
 }
