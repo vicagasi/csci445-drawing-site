@@ -256,3 +256,9 @@ function selectColor(x){
     }
     
 }
+
+function downloadCanvas(){
+    canvas.toBlob(function(blob) {
+        saveAs(blob, "canvas.png");
+    });
+}

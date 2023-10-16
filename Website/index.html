@@ -49,6 +49,7 @@
         <script type="text/javascript" src="../Common/webgl-utils.js"></script>
         <script type="text/javascript" src="../Common/initShaders.js"></script>
         <script type="text/javascript" src="../Common/MV.js"></script>
+        <script type="text/javascript" src="../node_modules/file-saver/src/FileSaver.js"></script>
         <script type="text/javascript" src="main.js"></script>
         <link rel="stylesheet" href="main.css">
         </head>
@@ -65,6 +66,7 @@
         <button onclick="selectColor(5)" class="cm">X</button>
         <button onclick="selectColor(6)" class="cw">X</button>
         <button onclick="selectColor(7)" class="cc">X</button>
+        <button onclick="downloadCanvas()" class="right"><img src="../Icons/save.svg"></button>
     </header>
     <main>
         <canvas id="canvas" width="1250" height="700"></canvas>

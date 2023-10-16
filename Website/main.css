@@ -13,6 +13,10 @@ header {
     justify-content: left;
 }
 
+.right {
+    margin-left: auto;
+}
+
 .show {
     background-color: slategray;
 }
